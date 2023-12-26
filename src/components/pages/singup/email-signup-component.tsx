@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -15,6 +15,7 @@ import { envVars } from '@/configs'
 import SpinnerIcon from '@/components/ui/icons/spinner'
 import { toast } from 'sonner'
 import { manageUserData } from '@/utils/auth/manageUserData'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const loginSchema = z.object({
   fullName: z.string({ required_error: 'Full name is required!' }).trim(),
@@ -35,9 +36,11 @@ const loginSchema = z.object({
 interface Props {
   isLoading: boolean
   setIsLoading: Dispatch<SetStateAction<boolean>>
+  rememberMe: boolean
+  setrememberMe: Dispatch<SetStateAction<boolean>>
 }
 
-export default function EmailSignupComponent({ isLoading, setIsLoading }: Props) {
+export default function EmailSignupComponent({ isLoading, setIsLoading, rememberMe, setrememberMe }: Props) {
   const { push } = useRouter()
   const searchParams = useSearchParams()
   const hasPrevPath = searchParams.has('prevPath')
@@ -74,7 +77,7 @@ export default function EmailSignupComponent({ isLoading, setIsLoading }: Props)
           setIsLoading(false)
           toast.success('Signed up successfully!')
           const authData = result?.data?.data
-          manageUserData(authData, true)
+          manageUserData(authData, rememberMe)
           if (hasPrevPath) {
             push(prevPath!)
           } else {
@@ -97,6 +100,7 @@ export default function EmailSignupComponent({ isLoading, setIsLoading }: Props)
           name='fullName'
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Name*</FormLabel>
               <FormControl>
                 <Input placeholder='Enter your full name' {...field} disabled={isLoading} />
               </FormControl>
@@ -109,6 +113,7 @@ export default function EmailSignupComponent({ isLoading, setIsLoading }: Props)
           name='email'
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Email*</FormLabel>
               <FormControl>
                 <Input placeholder='Enter your email' {...field} disabled={isLoading} />
               </FormControl>
@@ -121,6 +126,7 @@ export default function EmailSignupComponent({ isLoading, setIsLoading }: Props)
           name='password'
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Password*</FormLabel>
               <FormControl>
                 <Input type='password' placeholder='Enter your password' {...field} disabled={isLoading} />
               </FormControl>
@@ -133,6 +139,7 @@ export default function EmailSignupComponent({ isLoading, setIsLoading }: Props)
           name='repeatPassword'
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Repeat Password*</FormLabel>
               <FormControl>
                 <Input type='password' placeholder='Repeat your password' {...field} disabled={isLoading} />
               </FormControl>
@@ -140,6 +147,19 @@ export default function EmailSignupComponent({ isLoading, setIsLoading }: Props)
             </FormItem>
           )}
         />
+        <div className='flex justify-between items-center'>
+          <div className='flex items-center space-x-2 pt-4 pb-3'>
+            <Checkbox id='signup-remember-me' />
+            <label
+              htmlFor='signup-remember-me'
+              className='text-sm font-medium leading-none text-muted-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+              Remember Me
+            </label>
+          </div>
+          <p className='cursor-pointer text-sky-700 text-sm' title='Dummy link'>
+            Forgot password?
+          </p>
+        </div>
         <Button type='submit' disabled={isLoading}>
           {isLoading ? <SpinnerIcon /> : 'Signup'}
         </Button>
