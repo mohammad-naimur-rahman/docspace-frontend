@@ -7,13 +7,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
 import { z } from 'zod'
 import axios from 'axios'
 import auth from '@/lib/firebase'
 import { AuthError, UserCredential, createUserWithEmailAndPassword } from 'firebase/auth'
 import { envVars } from '@/configs'
 import SpinnerIcon from '@/components/ui/icons/spinner'
+import { toast } from 'sonner'
+import { manageUserData } from '@/utils/auth/manageUserData'
 
 const loginSchema = z.object({
   fullName: z.string({ required_error: 'Full name is required!' }).trim(),
@@ -73,7 +74,7 @@ export default function EmailSignupComponent({ isLoading, setIsLoading }: Props)
           setIsLoading(false)
           toast.success('Signed up successfully!')
           const authData = result?.data?.data
-          // manageUserData(authData)
+          manageUserData(authData, true)
           if (hasPrevPath) {
             push(prevPath!)
           } else {
