@@ -1,7 +1,7 @@
+import { IAuthUser, ITokenData, IUser } from '@/types/user'
 import { setCookie } from 'cookies-next'
 import { jwtDecode } from 'jwt-decode'
 import { calculateTokenExpiration } from './calculateTokenExpiration'
-import { IAuthUser, ITokenData, IUser } from '@/types/user'
 
 export const manageUserData = (authData: IAuthUser, rememberMe: boolean) => {
   const accessToken = authData?.token?.accessToken
@@ -37,8 +37,6 @@ export const manageUserData = (authData: IAuthUser, rememberMe: boolean) => {
   } else {
     setCookie('accessToken', accessToken)
     setCookie('refreshToken', refreshToken)
-
-    // Saving usee data with refresh token expiration because when refresh token will expire, user needs to login again
     setCookie('userData', JSON.stringify(userDataToSave))
   }
 }
