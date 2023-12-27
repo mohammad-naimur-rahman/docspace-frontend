@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import React, { ElementType, forwardRef } from 'react'
 
-type Variant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'body' | 'body-small' | 'small'
+type Variant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body' | 'body-small' | 'small'
 
 interface Props {
   variant: Variant
@@ -16,6 +16,7 @@ const tags: Record<Variant, ElementType> = {
   h3: 'h3',
   h4: 'h4',
   h5: 'h5',
+  h6: 'h6',
   body: 'p',
   'body-small': 'p',
   small: 'span',
@@ -27,6 +28,7 @@ const sizes: Record<Variant, string> = {
   h3: 'font-semibold text-xl lg:text-2xl xl:text-3xl',
   h4: 'font-semibold text-xl sm:text-2xl',
   h5: 'font-semibold text-lg sm:text-xl',
+  h6: 'font-semibold',
   body: 'text-lg sm:text-md',
   'body-small': 'text-md sm:text-sm',
   small: 'text-sm sm:text-xs',
