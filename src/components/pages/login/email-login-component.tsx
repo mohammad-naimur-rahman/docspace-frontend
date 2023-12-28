@@ -67,7 +67,7 @@ export default function EmailLoginComponent({ isLoading, setIsLoading, rememberM
           if (hasPrevPath) {
             push(prevPath!)
           } else {
-            push('/')
+            push('/dashboard/profile')
           }
         }
       }

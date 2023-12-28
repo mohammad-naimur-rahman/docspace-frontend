@@ -14,12 +14,13 @@ import Typography from '@/components/ui/typography'
 import { useGetFolderQuery } from '@/redux/features/foldersApi'
 import { IFile, IFolder, ITableData } from '@/types/data-table-types'
 import { getToken } from '@/utils/auth/getToken'
+import withAuth from '@/utils/auth/withAuth'
 import { formatDate } from '@/utils/formatDate'
 import { ColumnDef } from '@tanstack/react-table'
 import { ChevronLeft, ChevronRight, Download, Folder } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-export default function FilesPage() {
+function FilesPage() {
   // FIXME: backward folder tree
   const [prevFolder, setprevFolder] = useState<string | null>(null)
   const [currentFolder, setcurrentFolder] = useState<string>('root')
@@ -155,3 +156,5 @@ export default function FilesPage() {
     </section>
   )
 }
+
+export default withAuth(FilesPage)

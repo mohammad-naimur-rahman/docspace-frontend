@@ -1,7 +1,12 @@
 import SideNav from '@/components/pages/dashboard/ui/side-nav'
 import TopNav from '@/components/pages/dashboard/ui/top-nav'
+import { ReactNode } from 'react'
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+interface Props {
+  children: ReactNode
+}
+
+export default function DashboardLayout({ children }: Props) {
   return (
     <main>
       <TopNav />

@@ -1,3 +1,4 @@
+import { fileTypesArr } from '@/constants/file-data-type'
 import { mkdir, unlink, writeFile } from 'fs/promises'
 import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
@@ -16,6 +17,14 @@ export async function POST(request: NextRequest) {
   const filesFolderPath = path.join(process.cwd(), 'public', 'files')
 
   await mkdir(filesFolderPath, { recursive: true })
+
+  if (!file.name) {
+    return NextResponse.json({ success: false, message: 'File name is required!' })
+  }
+
+  if (!fileTypesArr.includes(file.name?.split('.').slice(-1)[0])) {
+    return NextResponse.json({ success: false, message: 'Unsupported file format!' })
+  }
 
   if (file.size > 10 * 2 ** 20) {
     return NextResponse.json({ success: false, message: 'File size too big!' })
