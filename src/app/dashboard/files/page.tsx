@@ -2,6 +2,7 @@
 
 import { DataTable } from '@/components/pages/dashboard/files/data-table'
 import FileTypeIcon from '@/components/pages/dashboard/files/file-type-icon'
+import FileUploader from '@/components/pages/dashboard/files/file-uploader'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import Typography from '@/components/ui/typography'
@@ -9,7 +10,7 @@ import { useGetFolderQuery } from '@/redux/features/foldersApi'
 import { IFile, IFolder, ITableData } from '@/types/data-table-types'
 import { getToken } from '@/utils/auth/getToken'
 import { ColumnDef } from '@tanstack/react-table'
-import { Folder, Plus } from 'lucide-react'
+import { Folder, FolderPlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function FilesPage() {
@@ -77,7 +78,7 @@ export default function FilesPage() {
       cell: ({ row }) => {
         if (row.original.dataType === 'file')
           return (
-            <a href={row.original.filePath} download>
+            <a href={`/${row.original.filePath}`} download>
               <Button>Download</Button>
             </a>
           )
@@ -96,10 +97,15 @@ export default function FilesPage() {
   return (
     <section className='p-5'>
       <div className='flex flex-wrap items-center justify-between gap-3'>
-        <Typography variant='h2'>Documents</Typography>
-        <Button size='lg'>
-          <Plus className='mr-1' /> Upload
-        </Button>
+        <div className='flex flex-wrap items-center gap-5'>
+          <Typography variant='h2'>Documents</Typography>
+          <Button size='lg'>
+            <FolderPlus className='mr-1' />
+            New Folder
+          </Button>
+        </div>
+
+        <FileUploader />
       </div>
 
       <div className='pt-8'>
