@@ -1,3 +1,5 @@
+'use client'
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import Typography from '@/components/ui/typography'
 import { IFile } from '@/types/data-table-types'
@@ -38,7 +40,9 @@ export default function XlsxRenderer({ file }: { file: IFile }) {
         <TableHeader>
           <TableRow>
             {header?.map((col, i) => (
-              <TableHead key={i}>{col}</TableHead>
+              <TableHead key={i} className='font-semibold'>
+                {col}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>

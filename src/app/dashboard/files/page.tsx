@@ -1,9 +1,11 @@
 'use client'
 
 import { DataTable } from '@/components/pages/dashboard/files/data-table'
+import FileDeleteComponent from '@/components/pages/dashboard/files/file-delete-component'
 import FilePreviewer from '@/components/pages/dashboard/files/file-previewer'
 import FileUpdater from '@/components/pages/dashboard/files/file-updater'
 import FileUploader from '@/components/pages/dashboard/files/file-uploader'
+import FolderDeleteComponent from '@/components/pages/dashboard/files/folder-delete-component'
 import FolderUpdater from '@/components/pages/dashboard/files/folder-updater'
 import NewFolderCreator from '@/components/pages/dashboard/files/new-folder-creator'
 import { Button } from '@/components/ui/button'
@@ -105,6 +107,10 @@ export default function FilesPage() {
     {
       accessorKey: 'delete',
       header: 'Delete',
+      cell: ({ row }) => {
+        if (row.original.dataType === 'file') return <FileDeleteComponent file={row.original as IFile} />
+        else return <FolderDeleteComponent folder={row.original as IFolder} />
+      },
     },
   ]
 

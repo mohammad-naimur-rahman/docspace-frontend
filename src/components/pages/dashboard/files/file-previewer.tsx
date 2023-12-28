@@ -24,7 +24,6 @@ export default function FilePreviewer({ file }: Props) {
       .then(textOutput => {
         text = textOutput
       })
-    console.log(text)
     return text
   }
 
