@@ -61,6 +61,19 @@ export default function FilePreviewer({ file }: Props) {
             ) : null}
 
             {['txt'].includes(file.type) ? <pre className='w-full h-[80vh]'>{renderText(file.filePath)}</pre> : null}
+
+            {file.type === 'mp3' ? (
+              <audio controls>
+                <source src={`/${file.filePath}`} type='audio/mpeg' />
+              </audio>
+            ) : null}
+
+            {file.type === 'mp4' ? (
+              <video controls>
+                <source src={`/${file.filePath}`} type='video/mp4' />
+                Your browser does not support the video tag.
+              </video>
+            ) : null}
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
