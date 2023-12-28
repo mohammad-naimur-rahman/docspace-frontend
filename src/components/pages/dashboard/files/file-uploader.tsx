@@ -23,8 +23,12 @@ export default function FileUploader({ currentFolder }: { currentFolder: string 
         body: data,
       })
 
-      if (!res.ok) throw new Error(await res.text())
       const response = await res.json()
+
+      if (response.success === false) {
+        toast.error(response.message)
+        return
+      }
       await uploadFile({
         payload: {
           title: response.name,
@@ -51,17 +55,21 @@ export default function FileUploader({ currentFolder }: { currentFolder: string 
   return (
     <>
       {showUploadPlace ? (
-        <div className='flex items-center gap-2'>
-          <ReactDragDrop
-            handleChange={handleChange}
-            name='file'
-            types={fileTypesArr}
-            classes='[&_span]:text-primary'
-            naxSize={10}
-          />
-          <Button size='icon' variant='outline' onClick={() => setshowUploadPlace(false)}>
-            <X />
-          </Button>
+        <div className='flex flex-col gap-1'>
+          <div className='flex items-center gap-2'>
+            <ReactDragDrop
+              handleChange={handleChange}
+              name='file'
+              types={fileTypesArr}
+              classes='[&_span]:text-primary'
+              naxSize={10}
+            />
+
+            <Button size='icon' variant='outline' onClick={() => setshowUploadPlace(false)}>
+              <X />
+            </Button>
+          </div>
+          <p className='text-xs italic text-muted-foreground'>Max size: 10 MB</p>
         </div>
       ) : (
         <Button size='lg' onClick={() => setshowUploadPlace(true)}>

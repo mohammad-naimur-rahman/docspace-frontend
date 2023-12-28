@@ -28,4 +28,5 @@ export interface ITableData {
   files?: string[]
   size?: number
   filePath?: string
+  createdAt: Date
 }

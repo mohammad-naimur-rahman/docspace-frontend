@@ -9,8 +9,9 @@ import Typography from '@/components/ui/typography'
 import { useGetFolderQuery } from '@/redux/features/foldersApi'
 import { IFile, IFolder, ITableData } from '@/types/data-table-types'
 import { getToken } from '@/utils/auth/getToken'
+import { formatDate } from '@/utils/formatDate'
 import { ColumnDef } from '@tanstack/react-table'
-import { Folder, FolderPlus } from 'lucide-react'
+import { Download, Folder, FolderPlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function FilesPage() {
@@ -40,7 +41,7 @@ export default function FilesPage() {
       cell: ({ row }) => {
         if (row.original.dataType === 'file') {
           return (
-            <p className='flex items-center gap-2 cursor-pointer'>
+            <p className='flex items-center gap-2 cursor-pointer [overflow-wrap:break-word]'>
               <FileTypeIcon type={row?.original?.type!} />
               {row?.original?.title}
             </p>
@@ -61,6 +62,9 @@ export default function FilesPage() {
       accessorKey: 'createdAt',
       header: 'Created At',
       enableSorting: true,
+      cell: ({ row }) => {
+        return <p>{formatDate(row.original.createdAt)}</p>
+      },
     },
     {
       accessorKey: 'Size / files',
@@ -80,7 +84,9 @@ export default function FilesPage() {
         if (row.original.dataType === 'file')
           return (
             <a href={`/${row.original.filePath}`} download>
-              <Button>Download</Button>
+              <Button size='sm'>
+                <Download className='mr-2 w-4 h-4' /> Download
+              </Button>
             </a>
           )
       },

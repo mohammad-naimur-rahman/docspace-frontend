@@ -17,6 +17,10 @@ export async function POST(request: NextRequest) {
 
   await mkdir(filesFolderPath, { recursive: true })
 
+  if (file.size > 10 * 2 ** 20) {
+    return NextResponse.json({ success: false, message: 'File size too big!' })
+  }
+
   const filePath = path.join(filesFolderPath, file.name)
   await writeFile(filePath, buffer)
   const relativePath = path.relative(path.join(process.cwd(), 'public'), filePath)
@@ -24,7 +28,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({
     success: true,
     path: relativePath,
-    size: (file.size / 10 ** 6).toFixed(2), // in MB
+    size: (file.size / 2 ** 20).toFixed(2), // in MB
     type: file.type,
     name: file.name,
   })
