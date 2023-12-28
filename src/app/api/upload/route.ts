@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from 'fs/promises'
+import { mkdir, unlink, writeFile } from 'fs/promises'
 import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 
@@ -31,5 +31,23 @@ export async function POST(request: NextRequest) {
     size: (file.size / 2 ** 20).toFixed(2), // in MB
     type: file.type,
     name: file.name,
+  })
+}
+
+export async function DELETE(request: NextRequest) {
+  // Get the file path from the request body
+  const data = await request.json()
+  const filePath = data.path
+
+  // Join the current working directory with the public/files directory and the file name
+  const absolutePath = path.join(process.cwd(), 'public', filePath)
+
+  // Delete the file asynchronously using the absolute path
+  await unlink(absolutePath)
+
+  // Return a success response
+  return NextResponse.json({
+    success: true,
+    message: 'File deleted!',
   })
 }

@@ -24,7 +24,7 @@ export default function FilesPage() {
   const [prevFolder, setprevFolder] = useState<string | null>(null)
   const [currentFolder, setcurrentFolder] = useState<string>('root')
   const [parentFolder, setparentFolder] = useState<string | null>(null)
-  const { isFetching, isSuccess, data } = useGetFolderQuery({ id: currentFolder, token: getToken() })
+  const { isLoading, isFetching, isSuccess, data } = useGetFolderQuery({ id: currentFolder, token: getToken() })
   const [tableData, settableData] = useState<ITableData[]>([])
 
   const folders = data?.data?.subFolders?.map((el: IFolder) => {
@@ -143,14 +143,14 @@ export default function FilesPage() {
       </div>
 
       <div className='pt-5'>
-        {isFetching ? (
+        {isLoading ? (
           <div className='flex flex-col gap-2'>
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (
               <Skeleton key={i} className='w-full h-10' />
             ))}
           </div>
         ) : null}
-        {!isFetching && tableData ? <DataTable columns={columns} data={tableData} /> : null}
+        {!isLoading && tableData ? <DataTable columns={columns} data={tableData} /> : null}
       </div>
     </section>
   )

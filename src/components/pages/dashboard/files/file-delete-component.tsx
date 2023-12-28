@@ -4,6 +4,7 @@ import ConfirmationPrompt from '@/components/ui/confirmation-prompt'
 import { useDeleteFileMutation } from '@/redux/features/filesApi'
 import { IFile } from '@/types/data-table-types'
 import { getToken } from '@/utils/auth/getToken'
+import axios from 'axios'
 import { Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -26,7 +27,15 @@ export default function FileDeleteComponent({ file }: { file: IFile }) {
           open={showPrompt}
           onOpenChange={() => setshowPrompt(!showPrompt)}
           cb={async () => {
-            await deleteFile({ id: file._id, token: getToken() })
+            try {
+              // deleting file locally
+              await axios.delete('/api/upload', { data: { path: `/${file.filePath}` } })
+
+              // then delete from the databse
+              await deleteFile({ id: file._id, token: getToken() })
+            } catch (error) {
+              toast.error((error as Error).message)
+            }
           }}
         />
       ) : null}
