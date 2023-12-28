@@ -1,6 +1,7 @@
 'use client'
 
 import { DataTable } from '@/components/pages/dashboard/files/data-table'
+import { DataTableColumnHeader } from '@/components/pages/dashboard/files/data-table/column-header'
 import FileDeleteComponent from '@/components/pages/dashboard/files/file-delete-component'
 import FilePreviewer from '@/components/pages/dashboard/files/file-previewer'
 import FileUpdater from '@/components/pages/dashboard/files/file-updater'
@@ -46,8 +47,7 @@ function FilesPage() {
   const columns: ColumnDef<ITableData>[] = [
     {
       accessorKey: 'title',
-      header: 'Name',
-      enableSorting: true,
+      header: ({ column }) => <DataTableColumnHeader column={column} title='Title' />,
       cell: ({ row }) => {
         if (row.original.dataType === 'file') {
           return <FilePreviewer file={row.original as IFile} />
@@ -66,10 +66,11 @@ function FilesPage() {
           )
         }
       },
+      enableSorting: true,
     },
     {
       accessorKey: 'createdAt',
-      header: 'Created At',
+      header: ({ column }) => <DataTableColumnHeader column={column} title='Created At' />,
       enableSorting: true,
       cell: ({ row }) => {
         return <p>{formatDate(row.original.createdAt)}</p>

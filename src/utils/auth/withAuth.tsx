@@ -1,25 +1,32 @@
-/* eslint-disable react/display-name */
-// Import the dependencies
-import { getCookie } from 'cookies-next'
-import { redirect, usePathname } from 'next/navigation'
+'use client'
 
-// Define the HOC function
+/* eslint-disable react/display-name */
+import { CookieValueTypes, getCookie } from 'cookies-next'
+import { redirect, usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
 const withAuth = (WrappedComponent: any) => {
-  // Return the wrapper component
   return (props: any) => {
-    // Get the token and pathname
-    const token = getCookie('accessToken')
+    const [accessToken, setaccessToken] = useState<CookieValueTypes | null>(null)
+    const [isLoading, setisLoading] = useState(true)
+
+    useEffect(() => {
+      setaccessToken(getCookie('accessToken'))
+      setisLoading(false)
+    }, [])
+
     const pathname = usePathname()
 
-    // If the token is not present, redirect to the login page
-    if (!token) {
+    if (isLoading) {
+      return <p>Loading...</p>
+    }
+
+    if (!accessToken) {
       return redirect(`/login?prevPath=${pathname}`)
     }
 
-    // Otherwise, render the wrapped component with the props
     return <WrappedComponent {...props} />
   }
 }
 
-// Export the HOC function
 export default withAuth
