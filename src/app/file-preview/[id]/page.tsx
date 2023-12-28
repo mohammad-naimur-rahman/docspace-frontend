@@ -1,5 +1,6 @@
 'use client'
 
+import XlsxRenderer from '@/components/pages/dashboard/files/xlsx-renderer'
 import Typography from '@/components/ui/typography'
 import { useGetFileQuery } from '@/redux/features/filesApi'
 import { IFile } from '@/types/data-table-types'
@@ -24,7 +25,7 @@ export default function FileRenderer() {
   }, [file])
 
   if (isLoading) {
-    return <p>Loading...</p>
+    return <p className='text-center italic text-muted-foreground text-2xl pt-10'>Loading...</p>
   }
 
   if (file?.type === 'txt') {
@@ -37,6 +38,11 @@ export default function FileRenderer() {
       </div>
     )
   }
+
+  if (['xls', 'xlsx'].includes(file?.type)) {
+    return <XlsxRenderer file={file} />
+  }
+
   return (
     <div className='[&_canvas]:mx-auto'>
       <Typography variant='h4' className='py-10 text-center px-5'>
