@@ -3,6 +3,7 @@
 import { DataTable } from '@/components/pages/dashboard/files/data-table'
 import FileTypeIcon from '@/components/pages/dashboard/files/file-type-icon'
 import FileUploader from '@/components/pages/dashboard/files/file-uploader'
+import NewFolderCreator from '@/components/pages/dashboard/files/new-folder-creator'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import Typography from '@/components/ui/typography'
@@ -11,12 +12,14 @@ import { IFile, IFolder, ITableData } from '@/types/data-table-types'
 import { getToken } from '@/utils/auth/getToken'
 import { formatDate } from '@/utils/formatDate'
 import { ColumnDef } from '@tanstack/react-table'
-import { Download, Folder, FolderPlus } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, Folder } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function FilesPage() {
+  // TODO: fix folder tree
   const [prevFolder, setprevFolder] = useState<string | null>(null)
-  const [currentFolder, setcurrentFolder] = useState('root')
+  const [currentFolder, setcurrentFolder] = useState<string>('root')
+  const [parentFolder, setparentFolder] = useState<string | null>(null)
   const { isFetching, isSuccess, data } = useGetFolderQuery({ id: currentFolder, token: getToken() })
   const [tableData, settableData] = useState<ITableData[]>([])
 
@@ -28,10 +31,12 @@ export default function FilesPage() {
   })
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && folders && files) {
       settableData([...folders, ...files])
     }
-  }, [isSuccess, isFetching])
+  }, [isSuccess, isFetching, prevFolder])
+
+  console.log(prevFolder, currentFolder, parentFolder)
 
   const columns: ColumnDef<ITableData>[] = [
     {
@@ -41,7 +46,7 @@ export default function FilesPage() {
       cell: ({ row }) => {
         if (row.original.dataType === 'file') {
           return (
-            <p className='flex items-center gap-2 cursor-pointer [overflow-wrap:break-word]'>
+            <p className='flex items-center gap-2 cursor-pointer break-all'>
               <FileTypeIcon type={row?.original?.type!} />
               {row?.original?.title}
             </p>
@@ -50,7 +55,11 @@ export default function FilesPage() {
           return (
             <p
               className='flex items-center gap-2 font-semibold cursor-pointer'
-              onClick={() => setcurrentFolder(row.original._id)}>
+              onClick={() => {
+                setprevFolder(currentFolder)
+                setcurrentFolder(row.original._id)
+                setparentFolder(prevFolder)
+              }}>
               <Folder className='w-7 h-7 text-sky-700' />
               {row.original.title}
             </p>
@@ -106,24 +115,38 @@ export default function FilesPage() {
       <div className='flex flex-wrap items-center justify-between gap-3'>
         <div className='flex flex-wrap items-center gap-5'>
           <Typography variant='h2'>Documents</Typography>
-          <Button size='lg'>
-            <FolderPlus className='mr-1' />
-            New Folder
-          </Button>
+          <NewFolderCreator currentFolder={currentFolder} />
         </div>
-
         <FileUploader currentFolder={currentFolder} />
       </div>
 
-      <div className='pt-8'>
+      <div className='pt-3 space-x-2'>
+        <Button
+          variant='outline'
+          size='icon'
+          className='rounded-full'
+          disabled={prevFolder === null}
+          onClick={() => {
+            setcurrentFolder(prevFolder || 'root')
+            setprevFolder(parentFolder)
+            //setparentFolder(currentFolder || null)
+          }}>
+          <ChevronLeft className='w-7 h-7' />
+        </Button>
+        <Button variant='outline' size='icon' className='rounded-full'>
+          <ChevronRight className='w-7 h-7' />
+        </Button>
+      </div>
+
+      <div className='pt-5'>
         {isFetching ? (
-          <div className='flex flex-col gap-4'>
+          <div className='flex flex-col gap-2'>
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (
-              <Skeleton key={i} className='w-full h-14' />
+              <Skeleton key={i} className='w-full h-10' />
             ))}
           </div>
         ) : null}
-        {tableData ? <DataTable columns={columns} data={tableData} /> : null}
+        {!isFetching && tableData ? <DataTable columns={columns} data={tableData} /> : null}
       </div>
     </section>
   )
