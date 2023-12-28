@@ -14,6 +14,7 @@ import { Folder, FolderPlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function FilesPage() {
+  const [prevFolder, setprevFolder] = useState<string | null>(null)
   const [currentFolder, setcurrentFolder] = useState('root')
   const { isFetching, isSuccess, data } = useGetFolderQuery({ id: currentFolder, token: getToken() })
   const [tableData, settableData] = useState<ITableData[]>([])
@@ -41,7 +42,7 @@ export default function FilesPage() {
           return (
             <p className='flex items-center gap-2 cursor-pointer'>
               <FileTypeIcon type={row?.original?.type!} />
-              {row?.original?.title}.{row?.original?.type}
+              {row?.original?.title}
             </p>
           )
         } else {
@@ -105,7 +106,7 @@ export default function FilesPage() {
           </Button>
         </div>
 
-        <FileUploader />
+        <FileUploader currentFolder={currentFolder} />
       </div>
 
       <div className='pt-8'>

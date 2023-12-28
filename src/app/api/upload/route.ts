@@ -17,11 +17,15 @@ export async function POST(request: NextRequest) {
 
   await mkdir(filesFolderPath, { recursive: true })
 
-  console.log(file)
-
   const filePath = path.join(filesFolderPath, file.name)
   await writeFile(filePath, buffer)
   const relativePath = path.relative(path.join(process.cwd(), 'public'), filePath)
 
-  return NextResponse.json({ success: true, path: relativePath, size: file.size, type: file.type, name: file.name })
+  return NextResponse.json({
+    success: true,
+    path: relativePath,
+    size: (file.size / 10 ** 6).toFixed(2), // in MB
+    type: file.type,
+    name: file.name,
+  })
 }

@@ -2,12 +2,15 @@
 
 import { Button } from '@/components/ui/button'
 import { fileTypesArr } from '@/constants/file-data-type'
+import { useCreateFileMutation } from '@/redux/features/filesApi'
+import { getToken } from '@/utils/auth/getToken'
 import { Plus, X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FileUploader as ReactDragDrop } from 'react-drag-drop-files'
 import { toast } from 'sonner'
 
-export default function FileUploader() {
+export default function FileUploader({ currentFolder }: { currentFolder: string }) {
+  const [uploadFile, { isSuccess, isError, error }] = useCreateFileMutation()
   const [showUploadPlace, setshowUploadPlace] = useState(false)
   const handleChange = async (file: Blob) => {
     if (!file) return
@@ -22,8 +25,16 @@ export default function FileUploader() {
 
       if (!res.ok) throw new Error(await res.text())
       const response = await res.json()
-      console.log(response)
-      toast.success('File uploaded successfully!')
+      await uploadFile({
+        payload: {
+          title: response.name,
+          size: +response.size,
+          filePath: response.path,
+          type: response?.name?.split('.').slice(-1)[0],
+          parentFolder: currentFolder,
+        },
+        token: getToken(),
+      })
       setshowUploadPlace(false)
     } catch (e: unknown) {
       console.error(e)
@@ -31,6 +42,12 @@ export default function FileUploader() {
       setshowUploadPlace(false)
     }
   }
+
+  useEffect(() => {
+    if (isSuccess) toast.success('File uploaded successfully!')
+    if (isError) toast.error((error as Error).message)
+  }, [isSuccess, error, isError])
+
   return (
     <>
       {showUploadPlace ? (
