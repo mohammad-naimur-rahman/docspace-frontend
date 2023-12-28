@@ -1,4 +1,4 @@
-import SideNav from '@/components/pages/dashboard/ui/side-nav'
+import SideNav from '@/components/pages/dashboard/files/side-nav'
 import TopNav from '@/components/pages/dashboard/ui/top-nav'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

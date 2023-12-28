@@ -1,8 +1,10 @@
 'use client'
 
 import { DataTable } from '@/components/pages/dashboard/files/data-table'
-import FileTypeIcon from '@/components/pages/dashboard/files/file-type-icon'
+import FilePreviewer from '@/components/pages/dashboard/files/file-previewer'
+import FileUpdater from '@/components/pages/dashboard/files/file-updater'
 import FileUploader from '@/components/pages/dashboard/files/file-uploader'
+import FolderUpdater from '@/components/pages/dashboard/files/folder-updater'
 import NewFolderCreator from '@/components/pages/dashboard/files/new-folder-creator'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -16,7 +18,7 @@ import { ChevronLeft, ChevronRight, Download, Folder } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function FilesPage() {
-  // TODO: fix folder tree
+  // FIXME: backward folder tree
   const [prevFolder, setprevFolder] = useState<string | null>(null)
   const [currentFolder, setcurrentFolder] = useState<string>('root')
   const [parentFolder, setparentFolder] = useState<string | null>(null)
@@ -45,12 +47,7 @@ export default function FilesPage() {
       enableSorting: true,
       cell: ({ row }) => {
         if (row.original.dataType === 'file') {
-          return (
-            <p className='flex items-center gap-2 cursor-pointer break-all'>
-              <FileTypeIcon type={row?.original?.type!} />
-              {row?.original?.title}
-            </p>
-          )
+          return <FilePreviewer file={row.original as IFile} />
         } else {
           return (
             <p
@@ -79,11 +76,8 @@ export default function FilesPage() {
       accessorKey: 'Size / files',
       header: 'Size / Files',
       cell: ({ row }) => {
-        if (row.original.dataType === 'file') {
-          return <p>{row.original.size} MB</p>
-        } else {
-          return <p>{row?.original?.subFolders?.length! + row?.original?.files?.length!}</p>
-        }
+        if (row.original.dataType === 'file') return <p>{row.original.size} MB</p>
+        else return <p>{row?.original?.subFolders?.length! + row?.original?.files?.length!}</p>
       },
     },
     {
@@ -103,6 +97,10 @@ export default function FilesPage() {
     {
       accessorKey: 'edit',
       header: 'Edit',
+      cell: ({ row }) => {
+        if (row.original.dataType === 'file') return <FileUpdater file={row.original as IFile} />
+        else return <FolderUpdater folder={row.original as IFolder} />
+      },
     },
     {
       accessorKey: 'delete',
