@@ -22,7 +22,7 @@ export default function FileTypeIcon({ type }: Props) {
     return <File className='min-w-5 min-h-5' />
   }
 
-  if (['csv', 'xsl', 'xslx'].includes(type)) {
+  if (['csv', 'xls', 'xlsx'].includes(type)) {
     return <FilePieChart className='min-w-5 min-h-5' />
   }
 

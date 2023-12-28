@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-//@ts-ignore
-import FileViewer from 'react-file-viewer'
 
 export default function UploadForm() {
   const [file, setFile] = useState<File>()
@@ -37,13 +35,6 @@ export default function UploadForm() {
         <input type='file' name='file' onChange={e => setFile(e.target.files?.[0])} />
         <input type='submit' value='Upload' />
       </form>
-      {uploadedFile?.path ? (
-        <FileViewer
-          fileType={uploadedFile?.name?.split('.').slice(-1)[0]}
-          filePath={`/${uploadedFile?.path}`}
-          onError={(error: any) => console.error(error)}
-        />
-      ) : null}
     </>
   )
 }
