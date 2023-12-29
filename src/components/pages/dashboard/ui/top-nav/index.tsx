@@ -58,7 +58,10 @@ export default function TopNav({ mobileNavOpen, setmobileNavOpen }: Props) {
 
       <div className='flex items-center gap-3'>
         <ThemeSwitcher />
-        <AlignRight className='cursor-pointer' onClick={() => setmobileNavOpen(!mobileNavOpen)} />
+        <AlignRight
+          className='cursor-pointer lg:hidden inline-block'
+          onClick={() => setmobileNavOpen(!mobileNavOpen)}
+        />
       </div>
     </nav>
   )
