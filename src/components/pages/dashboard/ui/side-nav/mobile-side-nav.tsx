@@ -1,11 +1,14 @@
 import logo from '@/assets/logo.png'
 import { Img } from '@/components/ui/img'
 import { cn } from '@/lib/utils'
+import { useGetProfileQuery } from '@/redux/features/usersApi'
+import { IUser } from '@/types/user'
+import { getToken } from '@/utils/auth/getToken'
 import { X } from 'lucide-react'
 import Link from 'next/link'
 import { Dispatch, SetStateAction } from 'react'
 import NavLink from './nav-link'
-import { NavLinks } from './nav-links'
+import { navLinks } from './nav-links'
 
 interface Props {
   mobileNavOpen: boolean
@@ -13,6 +16,9 @@ interface Props {
 }
 
 export default function MobileSideNav({ mobileNavOpen, setmobileNavOpen }: Props) {
+  const { data } = useGetProfileQuery(getToken())
+  const profile: IUser = data?.data
+  const allNavLinks = navLinks(profile?.role)
   return (
     <div
       className={cn(
@@ -26,7 +32,7 @@ export default function MobileSideNav({ mobileNavOpen, setmobileNavOpen }: Props
         <X className='cursor-pointer' onClick={() => setmobileNavOpen(false)} />
       </div>
       <div className='flex flex-col gap-6 pt-6 pl-6'>
-        {NavLinks.map(link => (
+        {allNavLinks?.map(link => (
           <NavLink key={link.label} link={link} className='text-white' />
         ))}
       </div>
