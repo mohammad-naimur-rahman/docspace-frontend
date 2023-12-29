@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# DocScace Document Management application
 
-## Getting Started
+### It's a fullstack application using MERN stack and this is the frontend part of the application
 
-First, run the development server:
+**Backend Repository**: https://github.com/mohammad-naimur-rahman/docspace-backend
+
+### Library and tools used
+
+**Library**: `Next js`
+
+**UI and styling**: `Shadcn UI`, `Tailwind CSS`, `Sass`
+
+**Type Safety**: `TypeScript`
+
+**Icon Library**: `Lucid React`
+
+**Form and validations**: `React Hook Form`, `Zod`, `Hookform Resolvers`
+
+**Linting and prettifying**: `ESLint`, `Prettier`
+
+**Pre commit checking**: `Husky`, `Lint Staged`
+
+### Get started
+
+#### 1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/mohammad-naimur-rahman/docspace-frontend.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### 2. Install the dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+#### 3. Setup the environment
 
-## Learn More
+Follow `.env.example` and give the necessary environment variables
 
-To learn more about Next.js, take a look at the following resources:
+#### 4. Run locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+yarn dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### 5. Trigger pre-commit hook (Optional)
 
-## Deploy on Vercel
+```bash
+yarn prepare
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Follow package.json for more scripts**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Thanks for visiting this page, any queries or for contact me: [Naimur Rahman](https://www.linkedin.com/in/mohammad-naimur-rahman/)
