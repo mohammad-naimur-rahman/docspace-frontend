@@ -1,18 +1,21 @@
 'use client'
 
+import defaultAvatar from '@/assets/default-avatar.png'
 import logo from '@/assets/logo.png'
 import { Img } from '@/components/ui/img'
 import Typography from '@/components/ui/typography'
-import { getCookie } from 'cookies-next'
+import { useGetProfileQuery } from '@/redux/features/usersApi'
+import { IUser } from '@/types/user'
+import { getToken } from '@/utils/auth/getToken'
 import Link from 'next/link'
 import NavLink from './nav-link'
 import { NavLinks } from './nav-links'
 
 export default function SideNav() {
-  const userData = getCookie('userData')
-  const userDataParsed = userData && JSON.parse(userData)
+  const { data } = useGetProfileQuery(getToken())
+  const profile: IUser = data?.data
   return (
-    <aside className='w-[255px] bg-[#1C2434] min-h-screen fixed top-0 left-0 flex flex-col justify-between text-white'>
+    <aside className='w-[255px] bg-[#1C2434] min-h-screen fixed top-0 left-0 hidden lg:flex flex-col justify-between text-white'>
       <div>
         <Link href='/'>
           <Img src={logo} alt='DocSpace' className='w-1/2 mx-auto py-3' />
@@ -26,10 +29,22 @@ export default function SideNav() {
       </div>
 
       <div className='flex items-center justify-center gap-3 p-2 mb-5'>
-        <p className='w-16 h-16 rounded-full bg-secondary'>NA</p>
+        <p className='w-16 h-16 rounded-full bg-secondary overflow-hidden'>
+          {profile?.profilePicture ? (
+            <Img
+              src={profile?.profilePicture}
+              alt={profile?.fullName}
+              className='w-full h-full aspect-square object-cover'
+              activePlaceholder={false}
+              sizes='150px'
+            />
+          ) : (
+            <Img src={defaultAvatar} alt={profile?.fullName} />
+          )}
+        </p>
         <div className='space-y-1'>
-          <Typography variant='h6'>{userDataParsed?.name}</Typography>
-          <Typography variant='body-small'>{userDataParsed?.email}</Typography>
+          <Typography variant='h6'>{profile?.fullName}</Typography>
+          <Typography variant='body-small'>{profile?.email}</Typography>
         </div>
       </div>
     </aside>

@@ -6,19 +6,24 @@ import { useGetFilesQuery } from '@/redux/features/filesApi'
 import { IFile } from '@/types/data-table-types'
 import { getToken } from '@/utils/auth/getToken'
 import { formatDate } from '@/utils/formatDate'
-import { Search } from 'lucide-react'
-import { useState } from 'react'
+import { AlignRight, Search } from 'lucide-react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import FileTypeIcon from '../../files/file-type-icon'
 import ThemeSwitcher from './theme-switcher'
 
-export default function TopNav() {
+interface Props {
+  mobileNavOpen: boolean
+  setmobileNavOpen: Dispatch<SetStateAction<boolean>>
+}
+
+export default function TopNav({ mobileNavOpen, setmobileNavOpen }: Props) {
   const [value, setValue] = useState('')
 
   const search = useDebounce(value, 1000)
 
   const { data } = useGetFilesQuery({ search, token: getToken() })
   return (
-    <nav className='fixed top-0 left-[255px] w-[calc(100%_-_255px)] h-16 flex items-center justify-between px-6'>
+    <nav className='fixed top-0 left-0 lg:left-[255px] w-full lg:w-[calc(100%_-_255px)] h-16 flex items-center justify-between px-6'>
       <div className='rounded-full border border-muted-foreground border-opacity-50 flex items-center gap-3 p-2'>
         <Search />
         <input
@@ -30,7 +35,7 @@ export default function TopNav() {
       </div>
 
       {data?.data?.length > 0 ? (
-        <Table className='fixed left-[255px] bg-primary-foreground top-[80px] z-20 w-full min-h-20 max-w-[900px]'>
+        <Table className='fixed left-0 lg:left-[255px] bg-primary-foreground top-[80px] z-20 w-full min-h-20 max-w-[900px]'>
           <TableHeader>
             <TableRow>
               <TableHead className='w-[100px]'>Name</TableHead>
@@ -51,7 +56,10 @@ export default function TopNav() {
         </Table>
       ) : null}
 
-      <ThemeSwitcher />
+      <div className='flex items-center gap-3'>
+        <ThemeSwitcher />
+        <AlignRight className='cursor-pointer' onClick={() => setmobileNavOpen(!mobileNavOpen)} />
+      </div>
     </nav>
   )
 }
