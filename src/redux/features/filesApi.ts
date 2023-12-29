@@ -14,6 +14,15 @@ const filesApi = api.injectEndpoints({
       }),
       providesTags: ['folder'],
     }),
+    getFiles: build.query({
+      query: ({ search, token }) => ({
+        url: `${rootApi}/search?search=${search}`,
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
     createFile: build.mutation({
       query: ({ payload, token }) => ({
         url: rootApi,
@@ -49,4 +58,10 @@ const filesApi = api.injectEndpoints({
   }),
 })
 
-export const { useCreateFileMutation, useGetFileQuery, useUpdateFileMutation, useDeleteFileMutation } = filesApi
+export const {
+  useCreateFileMutation,
+  useGetFilesQuery,
+  useGetFileQuery,
+  useUpdateFileMutation,
+  useDeleteFileMutation,
+} = filesApi

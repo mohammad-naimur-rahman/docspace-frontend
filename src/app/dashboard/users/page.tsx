@@ -92,7 +92,7 @@ function UsersPage() {
   return (
     <section className='p-5'>
       <div className='flex flex-wrap items-center justify-between gap-3'>
-        <Typography variant='h2'>Documents</Typography>
+        <Typography variant='h2'>Users</Typography>
       </div>
 
       <div className='pt-5'>
