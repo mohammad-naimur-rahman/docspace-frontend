@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function DashboardLayout({ children }: Props) {
-  const [mobileNavOpen, setmobileNavOpen] = useState(true)
+  const [mobileNavOpen, setmobileNavOpen] = useState(false)
   return (
     <main>
       <TopNav mobileNavOpen={mobileNavOpen} setmobileNavOpen={setmobileNavOpen} />
