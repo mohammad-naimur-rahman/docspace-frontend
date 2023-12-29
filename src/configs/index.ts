@@ -9,6 +9,8 @@ const envVarSchema = z.object({
   messagingSenderId: z.string(),
   appId: z.string(),
   measurementId: z.string(),
+  cloudinary_upload_preset: z.string(),
+  cloudinary_cloudname: z.string(),
 })
 
 export const envVars = envVarSchema.parse({
@@ -20,4 +22,6 @@ export const envVars = envVarSchema.parse({
   messagingSenderId: process.env.NEXT_PUBLIC_messagingSenderId,
   appId: process.env.NEXT_PUBLIC_appId,
   measurementId: process.env.NEXT_PUBLIC_measurementId,
+  cloudinary_upload_preset: process.env.NEXT_PUBLIC_cloudinary_upload_preset,
+  cloudinary_cloudname: process.env.NEXT_PUBLIC_cloudinary_cloudname,
 })

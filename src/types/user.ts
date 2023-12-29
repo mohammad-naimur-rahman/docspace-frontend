@@ -1,3 +1,5 @@
+import { CookieValueTypes } from 'cookies-next'
+
 export interface ITokenData {
   iat: number
   exp: number
@@ -9,7 +11,8 @@ export interface IUser {
   _id: string
   fullName: string
   email: string
-  role: string
+  role: 'user' | 'admin'
+  profilePicture?: string
 }
 
 export interface IAuthUser {
@@ -18,4 +21,9 @@ export interface IAuthUser {
     accessToken: string
     refreshToken: string
   }
+}
+export interface IUpdateIdData<T> {
+  payload: Partial<T>
+  id?: string
+  token: CookieValueTypes
 }

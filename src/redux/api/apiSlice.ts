@@ -41,7 +41,7 @@ const baseQueryWithReauth = async (args: FetchArgs, api: BaseQueryApi, extraOpti
 const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['folder', 'folders'],
+  tagTypes: ['folder', 'user', 'users'],
   endpoints: () => ({}),
 })
 
