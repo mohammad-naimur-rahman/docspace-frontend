@@ -1,4 +1,4 @@
-# DocScace Document Management application
+# DocSpace Document Management application
 
 ### It's a fullstack application using MERN stack and this is the frontend part of the application
 
