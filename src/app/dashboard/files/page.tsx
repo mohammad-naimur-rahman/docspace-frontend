@@ -18,14 +18,13 @@ import { getToken } from '@/utils/auth/getToken'
 import withAuth from '@/utils/auth/withAuth'
 import { formatDate } from '@/utils/formatDate'
 import { ColumnDef } from '@tanstack/react-table'
-import { ChevronLeft, ChevronRight, Download, Folder } from 'lucide-react'
+import { ChevronLeft, Download, Folder } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 function FilesPage() {
-  // FIXME: backward folder tree
-  const [prevFolder, setprevFolder] = useState<string | null>(null)
+  const [step, setstep] = useState<number>(0)
+  const [fileRoutes, setfileRoutes] = useState<{ step: number; route: string }[]>([{ step, route: 'root' }])
   const [currentFolder, setcurrentFolder] = useState<string>('root')
-  const [parentFolder, setparentFolder] = useState<string | null>(null)
   const { isLoading, isFetching, isSuccess, data } = useGetFolderQuery({ id: currentFolder, token: getToken() })
   const [tableData, settableData] = useState<ITableData[]>([])
 
@@ -40,9 +39,7 @@ function FilesPage() {
     if (isSuccess && folders && files) {
       settableData([...folders, ...files])
     }
-  }, [isSuccess, isFetching, prevFolder])
-
-  console.log(prevFolder, currentFolder, parentFolder)
+  }, [isSuccess, isFetching, currentFolder])
 
   const columns: ColumnDef<ITableData>[] = [
     {
@@ -56,9 +53,9 @@ function FilesPage() {
             <p
               className='flex items-center gap-2 font-semibold cursor-pointer'
               onClick={() => {
-                setprevFolder(currentFolder)
+                setstep(step + 1)
+                setfileRoutes([...fileRoutes, { step: step + 1, route: row.original._id }])
                 setcurrentFolder(row.original._id)
-                setparentFolder(prevFolder)
               }}>
               <Folder className='w-7 h-7 text-sky-700' />
               {row.original.title}
@@ -131,16 +128,13 @@ function FilesPage() {
           variant='outline'
           size='icon'
           className='rounded-full'
-          disabled={prevFolder === null}
+          disabled={step === 0}
           onClick={() => {
-            setcurrentFolder(prevFolder || 'root')
-            setprevFolder(parentFolder)
-            //setparentFolder(currentFolder || null)
+            setstep(step - 1)
+            setcurrentFolder(fileRoutes[step - 1].route)
+            setfileRoutes(fileRoutes.filter(route => route.step !== step - 1))
           }}>
           <ChevronLeft className='w-7 h-7' />
-        </Button>
-        <Button variant='outline' size='icon' className='rounded-full'>
-          <ChevronRight className='w-7 h-7' />
         </Button>
       </div>
 

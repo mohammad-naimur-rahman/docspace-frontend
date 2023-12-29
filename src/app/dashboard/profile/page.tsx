@@ -1,3 +1,5 @@
+'use client'
+
 import withAuth from '@/utils/auth/withAuth'
 
 function ProfilePage() {
