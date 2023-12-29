@@ -17,9 +17,9 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
     <div className='flex items-center justify-between p-2'>
       <div className='flex flex-1 items-center space-x-2'>
         <Input
-          placeholder='Find files / folders...'
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
-          onChange={event => table.getColumn('title')?.setFilterValue(event.target.value)}
+          placeholder='Find by name'
+          value={(table.getColumn('fullName')?.getFilterValue() as string) ?? ''}
+          onChange={event => table.getColumn('fullName')?.setFilterValue(event.target.value)}
           className='h-8 w-[150px] lg:w-[250px]'
         />
 
